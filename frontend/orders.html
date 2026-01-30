@@ -59,7 +59,7 @@
 
         try {
             // Fetching from the Orders Service history route
-            const res = await fetch('http://127.0.0.1:5003/history');
+            const res = await fetch('https://cloudretail-orders.onrender.com/history');
             const allOrders = await res.json();
             
             // Filter orders to only show those belonging to the logged-in user

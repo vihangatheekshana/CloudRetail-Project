@@ -41,7 +41,7 @@
                 password: document.getElementById('pass').value,
                 confirm_password: document.getElementById('confirm').value
             };
-            const res = await fetch('http://127.0.0.1:5002/register', {
+            const res = await fetch('https://cloudretail-customers.onrender.com/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload)

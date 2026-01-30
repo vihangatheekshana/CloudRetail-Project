@@ -71,7 +71,7 @@
 
     async function loadProducts() {
         try {
-            const res = await fetch('http://127.0.0.1:5001/products');
+            const res = await fetch('https://cloudretail-products.onrender.com/products');
             allProducts = await res.json();
             displayProducts(allProducts);
         } catch (error) {

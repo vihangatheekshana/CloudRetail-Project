@@ -147,7 +147,7 @@
         };
 
         try {
-            const res = await fetch('http://127.0.0.1:5001/add-product', {
+            const res = await fetch('https://cloudretail-products.onrender.com', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(productData)
@@ -163,7 +163,7 @@
 
     async function loadInventory() {
         try {
-            const res = await fetch('http://127.0.0.1:5001/products');
+            const res = await fetch('https://cloudretail-products.onrender.com/products');
             allProducts = await res.json();
             const list = document.getElementById('inventoryList');
             
@@ -206,7 +206,7 @@
                 const idx = this.getAttribute('data-index');
                 const p = allProducts[idx];
                 if(confirm("Confirm deletion of: " + p.name + "?")) {
-                    const res = await fetch(`http://127.0.0.1:5001/delete-product/${encodeURIComponent(p.name)}`, { method: 'DELETE' });
+                    const res = await fetch(`https://cloudretail-products.onrender.com/delete-product/${encodeURIComponent(p.name)}`, { method: 'DELETE' });
                     const result = await res.json();
                     alert(result.message);
                     loadInventory();
@@ -226,7 +226,7 @@
     async function loadOrders() {
         const list = document.getElementById('adminOrderList');
         try {
-            const res = await fetch('http://127.0.0.1:5003/history');
+            const res = await fetch('https://cloudretail-orders.onrender.com/history');
             const orders = await res.json();
             
             if (!orders || orders.length === 0) {
