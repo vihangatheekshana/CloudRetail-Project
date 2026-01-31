@@ -157,7 +157,7 @@
             resetForm();
             loadInventory();
         } catch (err) {
-            alert("Error: Check if Products Service (5001) is running.");
+           alert("Error: The Products Cloud Service is currently waking up. Please try again in 30 seconds.");
         }
     };
 
@@ -245,7 +245,7 @@
                     <td><span class="badge ${o.order_status === 'Processing' ? 'bg-warning text-dark' : 'bg-success'}">${o.order_status || 'Pending'}</span></td>
                 </tr>`).join('');
         } catch (err) {
-            list.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-4">Error: Order Service (5003) is unreachable.</td></tr>';
+            list.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-4">Error: Cloud Order Service is currently unavailable.</td></tr>';
         }
     }
 
