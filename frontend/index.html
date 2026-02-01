@@ -71,7 +71,7 @@
 
     async function loadProducts() {
         try {
-            const res = await fetch('https://cloudretail-products.onrender.com/products');
+            const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/products');
             allProducts = await res.json();
             displayProducts(allProducts);
         } catch (error) {
@@ -186,4 +186,5 @@
     window.onload = loadProducts;
 </script>
 </body>
+
 </html>
