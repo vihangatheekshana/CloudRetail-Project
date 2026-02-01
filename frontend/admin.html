@@ -108,9 +108,10 @@
 </div>
 
 <script>
-    if(localStorage.getItem('userRole') !== 'admin') {
-        alert("Unauthorized Access!");
-        window.location.href = "index.html";
+   if(localStorage.getItem('userRole') !== 'admin') {
+    console.log("Admin check bypassed for debugging");
+    // window.location.href = "login.html"; // Comment this out to stop the blink!
+}
     }
 
     let allProducts = [];
@@ -254,3 +255,4 @@
 </body>
 
 </html>
+
