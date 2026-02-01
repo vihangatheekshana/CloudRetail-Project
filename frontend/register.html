@@ -41,7 +41,7 @@
                 password: document.getElementById('pass').value,
                 confirm_password: document.getElementById('confirm').value
             };
-            const res = await fetch('https://cloudretail-customers.onrender.com/register', {
+            const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/register', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload)
@@ -52,4 +52,5 @@
         };
     </script>
 </body>
+
 </html>
