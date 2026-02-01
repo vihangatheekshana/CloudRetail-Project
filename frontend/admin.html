@@ -147,7 +147,7 @@
         };
 
         try {
-            const res = await fetch('https://cloudretail-products.onrender.com', {
+            const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/products', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(productData)
@@ -163,7 +163,7 @@
 
     async function loadInventory() {
         try {
-            const res = await fetch('https://cloudretail-products.onrender.com/products');
+            const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/products');
             allProducts = await res.json();
             const list = document.getElementById('inventoryList');
             
@@ -206,7 +206,7 @@
                 const idx = this.getAttribute('data-index');
                 const p = allProducts[idx];
                 if(confirm("Confirm deletion of: " + p.name + "?")) {
-                    const res = await fetch(`https://cloudretail-products.onrender.com/delete-product/${encodeURIComponent(p.name)}`, { method: 'DELETE' });
+                    const res = await fetch(`https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/delete-product/${encodeURIComponent(p.name)}`, { method: 'DELETE' });
                     const result = await res.json();
                     alert(result.message);
                     loadInventory();
@@ -226,7 +226,7 @@
     async function loadOrders() {
         const list = document.getElementById('adminOrderList');
         try {
-            const res = await fetch('https://cloudretail-orders.onrender.com/history');
+            const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/history');
             const orders = await res.json();
             
             if (!orders || orders.length === 0) {
@@ -252,4 +252,5 @@
     window.onload = () => { loadInventory(); loadOrders(); };
 </script>
 </body>
+
 </html>
