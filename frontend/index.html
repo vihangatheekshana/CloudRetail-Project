@@ -64,8 +64,8 @@
 
 <script>
     if(localStorage.getItem('isLoggedIn') !== 'true') window.location.href = "login.html";
-    document.getElementById('userDisplay').innerText = "Hello, " + localStorage.getItem('userName');
-
+   document.getElementById('userDisplay').innerText = "Hello, " + (localStorage.getItem('userName') || 'Guest');
+    
     let cart = [];
     let allProducts = [];
 
@@ -182,9 +182,10 @@
         window.location.href = "checkout.html";
     }
 
-    function logout() { localStorage.clear(); window.location.href = "landing.html"; }
+   function logout() { localStorage.clear(); window.location.href = "login.html"; }
     window.onload = loadProducts;
 </script>
 </body>
 
 </html>
+
