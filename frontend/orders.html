@@ -59,7 +59,7 @@
 
         try {
             // Fetching from the Orders Service history route
-            const res = await fetch('https://cloudretail-orders.onrender.com/history');
+            const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/history');
             const allOrders = await res.json();
             
             // Filter orders to only show those belonging to the logged-in user
@@ -128,4 +128,5 @@
 </script>
 
 </body>
+
 </html>
