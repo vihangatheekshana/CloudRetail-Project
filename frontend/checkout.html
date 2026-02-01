@@ -112,7 +112,7 @@
             // Simulation: Email & Bank processing delay
             setTimeout(async () => {
                 try {
-                    const res = await fetch('https://cloudretail-orders.onrender.com/place-order', {
+                    const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/place-order', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
@@ -144,4 +144,5 @@
         }
     </script>
 </body>
+
 </html>
