@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pymongo
-import os  # Added to read MONGO_URI from AWS Configuration
+import os
 from mangum import Mangum
 
 app = Flask(__name__)
@@ -16,12 +16,19 @@ client = pymongo.MongoClient(MONGO_URI)
 db = client["CloudRetail_Final_Assignment"] 
 products_collection = db["assignment_items"] 
 
+# FIX: Added root '/' route to handle API Gateway path nesting
+@app.route('/', methods=['GET'])
 @app.route('/products', methods=['GET'])
 def get_products():
     try:
+        # Verify collection exists by counting
+        count = products_collection.count_documents({})
+        print(f"DEBUG: Found {count} products in assignment_items")
+        
         all_products = list(products_collection.find({}, {"_id": 0}))
         return jsonify(all_products)
     except Exception as e:
+        print(f"ERROR: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/products', methods=['POST'])
@@ -54,7 +61,7 @@ def update_stock():
     products_collection.update_one({"name": product_name}, {"$inc": {"stock_quantity": -quantity_bought}})
     return jsonify({"message": "Stock updated!"})
 
-# UPDATED HANDLER NAME: This matches your AWS Handler setting 'app.lambda_handler'
+# THE MASTER HANDLER: Matches AWS 'app.lambda_handler'
 lambda_handler = Mangum(app)
 
 if __name__ == '__main__':
