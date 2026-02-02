@@ -70,19 +70,24 @@
     let allProducts = [];
 
     async function loadProducts() {
+        const container = document.getElementById('productList');
+        container.innerHTML = '<p class="text-center mt-5">Fetching items from the cloud...</p>';
+
         try {
-            // 1. Points to your AWS API Gateway Invoke URL
+            // Points to your confirmed API Gateway Invoke URL
             const res = await fetch('https://ejch59j8vl.execute-api.eu-north-1.amazonaws.com/products');
             
-            if (!res.ok) throw new Error('Network response was not ok');
+            if (!res.ok) throw new Error('API Response Failed');
             
             allProducts = await res.json();
-            console.log("Products Loaded:", allProducts); // Check your console to see the data
+            console.log("Data retrieved successfully:", allProducts);
+            
+            // Render the products immediately
             displayProducts(allProducts);
         } catch (error) {
-            console.error("API Error:", error);
-            document.getElementById('productList').innerHTML = 
-                '<p class="text-center mt-5 text-danger">Error: Cloud Products Service is currently sleeping. Please check your Lambda Logs.</p>';
+            console.error("API Connection Error:", error);
+            container.innerHTML = 
+                '<p class="text-center mt-5 text-danger">Error: Cloud Products Service is currently sleeping. Check CORS and Lambda logs.</p>';
         }
     }
 
@@ -94,7 +99,7 @@
         }
         
         container.innerHTML = products.map((p, index) => {
-            // 2. We use || 0 to prevent "undefined" errors if a price is missing
+            // Maps exactly to your MongoDB fields: price_lkr and image_url
             const price = p.price_lkr || 0; 
             const img = p.image_url || 'https://via.placeholder.com/200?text=No+Image';
 
@@ -127,7 +132,6 @@
         attachActionListeners(products);
     }
 
-    // Rest of your cart and filter functions remain the same
     function attachActionListeners(currentDisplayedProducts) {
         document.querySelectorAll('.btn-buy-now').forEach(btn => {
             btn.onclick = () => {
@@ -146,6 +150,8 @@
     function filterProducts(category, btnElement) {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
+        
+        // Filter logic using case-sensitive database category names
         const filtered = category === 'All' ? allProducts : allProducts.filter(p => p.category === category);
         displayProducts(filtered);
     }
@@ -195,6 +201,8 @@
     }
 
     function logout() { localStorage.clear(); window.location.href = "login.html"; }
+    
+    // Triggers initial load
     window.onload = loadProducts;
 </script>
 </body>
