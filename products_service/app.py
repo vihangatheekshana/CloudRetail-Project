@@ -1,23 +1,29 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pymongo
-from mangum import Mangum  # Required for AWS Lambda
+import os  # Added to read MONGO_URI from AWS Configuration
+from mangum import Mangum
 
 app = Flask(__name__)
-# Professional CORS setup to prevent the "blinking" issue
+
+# Professional CORS setup to allow your Amplify frontend to connect
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Database Connection
-client = pymongo.MongoClient("mongodb+srv://Vihanga:Theekviha%4012345@cloudretailcluster.vvnbntb.mongodb.net/?appName=CloudRetailCluster")
+# Database Connection using Environment Variable
+# Ensure you have 'MONGO_URI' set in your Lambda Configuration tab
+MONGO_URI = os.environ.get('MONGO_URI', "mongodb+srv://Vihanga:Theekviha%4012345@cloudretailcluster.vvnbntb.mongodb.net/?appName=CloudRetailCluster")
+client = pymongo.MongoClient(MONGO_URI)
 db = client["CloudRetail_Final_Assignment"] 
 products_collection = db["assignment_items"] 
 
 @app.route('/products', methods=['GET'])
 def get_products():
-    all_products = list(products_collection.find({}, {"_id": 0}))
-    return jsonify(all_products)
+    try:
+        all_products = list(products_collection.find({}, {"_id": 0}))
+        return jsonify(all_products)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# Combined route to match your AWS API Gateway paths
 @app.route('/products', methods=['POST'])
 def add_or_update_product():
     new_data = request.json
@@ -25,7 +31,6 @@ def add_or_update_product():
     if not name:
         return jsonify({"error": "Product name is required"}), 400
 
-    # Upsert logic for Admin Sync
     products_collection.update_one({"name": name}, {"$set": new_data}, upsert=True)
     return jsonify({"message": f"Product '{name}' synchronized successfully!"})
 
@@ -49,9 +54,8 @@ def update_stock():
     products_collection.update_one({"name": product_name}, {"$inc": {"stock_quantity": -quantity_bought}})
     return jsonify({"message": "Stock updated!"})
 
-# THE MASTER HANDLER: This is what AWS actually talks to
-handler = Mangum(app)
+# UPDATED HANDLER NAME: This matches your AWS Handler setting 'app.lambda_handler'
+lambda_handler = Mangum(app)
 
 if __name__ == '__main__':
-    # Local testing remains on port 5001
     app.run(port=5001, debug=True)
